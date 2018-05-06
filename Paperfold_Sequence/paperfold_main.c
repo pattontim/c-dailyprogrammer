@@ -3,48 +3,34 @@
 #include <string.h>
 #include <ctype.h>
 
-char* itoa(int, char* , int);
+char * paperfold(int i, char * str);
 
 int main(){
     char str[50];
-    strcpy(str, "10111");
-    int end = strlen(str)-1;
-    int j = end-1;
-    while(j >= 0){
-        int newVal = end-j;
-        int currentChar = (str[j] == '0');
-        char appendVal[1];
-        //FIGURE OUT HOW TO APPEND CHAR OR USE IF STATEMENT
-        //sprintf(appendVal, "%d", currentChar);
-        //printf("Append val: %s\n", appendVal);
-        //strcat(str, appendVal); 
-        if(str[j] == 0){
-            //
-        }
-
-        sprintf(str+strlen(str), (str[j] == '0'));
-
-        printf("appending %d\n", currentChar);
-        printf("at index %d\n", end+newVal);
-        printf("new val: %d\n", newVal);
-        printf("j: %d\n", j);
-        j--;
-    }
-    printf("%s\n", str);
+    str[0] = '\0';
+    paperfold(4, str);
 }
 
-/*char * paperfold(int i, char * str) {
-    if(i = 0)
+char * paperfold(int i, char * str) {
+    if(i == 0)
         return str;
-    //add 1 to end
-    strcat(str, '1');
+    //add 1 to end TODO shorten
+    char one[2];
+    one[0] = '1';
+    one[1] = '\0';
+    strcat(str, one);
 
-    //add reverse string to end
-    int j = (strlen(str)-1)-1;
-    while(j >= 0){
-        printf("%d", j);
-        j--;
+    //add inverse to end of str
+    int end = strlen(str)-2;
+    while(end-- >= 0){
+        //TODO alternative to appendVal
+        char appendVal[2];
+        (str[end] == '0' ? (appendVal[0] = '1') : (appendVal[0] = '0'));
+        appendVal[1] = '\0';
+        strcat(str, appendVal);
     }
+    printf("%s\n", str);
 
-    //call recursive case.
-}*/
+    //recurse
+    paperfold(i-1, str);
+}
