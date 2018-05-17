@@ -16,3 +16,5 @@ Completed:
 [Paperfold Sequence Generator](https://www.reddit.com/r/dailyprogrammer/comments/8g0iil/20180430_challenge_359_easy_regular_paperfold/)
 
 [Seven Fragment Display Parser](https://www.reddit.com/r/dailyprogrammer/comments/8eger3/20180423_challenge_358_easy_decipher_the_seven/)
+
+[Tally Game Score Counter](https://www.reddit.com/r/dailyprogrammer/comments/8jcffg/20180514_challenge_361_easy_tally_program/)
