@@ -28,39 +28,41 @@ struct marker {
 
 
 int main(int argc, char * argv[]){
-    int i = 0;
-    if(*argv[1] == 'd'){
-        char encrypted[strlen(argv[3])];
-        char secretCode[strlen(argv[2])];
-        strcpy(encrypted, argv[3]);
-        strcpy(secretCode, argv[2]);
-        decryptMessage(encrypted, secretCode);
-        printf("%s\n", encrypted);
-        return -1;
-    }
-
-    //2nd argument is key, unencrypted is 3rd
-    //init board
-    for(int i = 0; i < 6; i++){
-        for(int j = 0; j < 6; j++){
-            board[j][i] = argv[1][i*6 + j];
-            //printf("%c", board[j][i]);
-        }
-        //printf("\n");
-    }
-
-    //printf("\n");
-
-    //init marker
+    //TODO merge behaviour using dynamic argument locations
+    //first step: put methods into own functions like initBoard?
     mark.x = 0;
     mark.y = 0;
 
-    char plainText[strlen(argv[2])];
-    char secretCode[strlen(argv[1])];
-    strcpy(plainText, argv[2]);
-    strcpy(secretCode, argv[1]);
-    encryptMessage(plainText, secretCode);
-    printf("Encrypted: %s\n", plainText);
+    int i = 0;
+    if(*argv[2] == '%'){ 
+        //2nd argument is key, unencrypted is 3rd
+        //init board
+        for(int i = 0; i < 6; i++){
+            for(int j = 0; j < 6; j++){
+                board[j][i] = argv[1][i*6 + j];
+                //printf("%c", board[j][i]);
+            }
+            //printf("\n");
+        }
+
+        //printf("\n");
+
+        char plainText[strlen(argv[2])];
+        char secretCode[strlen(argv[1])];
+        strcpy(plainText, argv[2]);
+        strcpy(secretCode, argv[1]);
+        encryptMessage(plainText, secretCode);
+        printf("Encrypted: %s\n", plainText+1);
+        return -1;
+    }
+
+    char encrypted[strlen(argv[3])];
+    char secretCode[strlen(argv[2])];
+    strcpy(encrypted, argv[3]);
+    strcpy(secretCode, argv[2]);
+    decryptMessage(encrypted, secretCode);
+    printf("Decrypted: %s\n", encrypted);
+    return -1;
 }
 
 /* return: 1 if worked, 0 elsewise 
@@ -68,7 +70,7 @@ int main(int argc, char * argv[]){
  */
 int encryptMessage(char * plain, char * secret){
     //l    loop thru message
-    int i = 0;
+    int i = 1;
     if(strlen(plain) == 0 || strlen(secret) == 0)
         return 0;
 
@@ -109,27 +111,25 @@ char encryptLetter(char * plain){
     int cipherY = (plainY + markIncY)%6;
 
     char enc = board[cipherX][cipherY];
-    
+
     int ciphVal = getCharValue(&enc);
     int ciphIncX = ciphVal%6;
     int ciphIncY = ciphVal/6;
 
-    shiftRow(&plainY);
+    //shift row according to algorithm, Y for row start, X for col start
 
+    shiftRow(&plainY);
     //prevent row shift from misaligning stored cipher location
     if(cipherY == plainY){
         cipherX++;
     }
-
     shiftCol(&cipherX);
 
-    //update cipherX & Y when chars are moved!
-
+    //wrap around marker
     mark.x = (mark.x + ciphIncX)%6;
     mark.y = (mark.y + ciphIncY)%6;
-        
-//    printState(plain, &enc);
 
+    //    printState(plain, &enc);
     return enc;
 }
 
