@@ -7,8 +7,7 @@ char * alphabet = "abcdefghijklmnopqrstuvwxyz";
 const int L_CHAR_OFFSET = 97;
 char decipherLetter(int cypText, int keyText);
 char encryptLetter(char * plain);
-int encryptMessage(char * plain, char * secret);
-int decryptMessage(char * encrypted, char * secret);
+int processSignature(char * signature, char * key, char mode);
 
 void setCharLocation(int * x, int * y, char * plain);
 int getCharValue(char * c);
@@ -33,66 +32,48 @@ int main(int argc, char * argv[]){
     mark.x = 0;
     mark.y = 0;
 
-    int i = 0;
-    if(*argv[2] == '%'){ 
-        //2nd argument is key, unencrypted is 3rd
-        //init board
-        for(int i = 0; i < 6; i++){
-            for(int j = 0; j < 6; j++){
-                board[j][i] = argv[1][i*6 + j];
-                //printf("%c", board[j][i]);
-            }
-            //printf("\n");
+    //init board
+    for(int i = 0; i < 6; i++){
+        for(int j = 0; j < 6; j++){
+            board[j][i] = argv[1][i*6 + j];
+            //printf("%c", board[j][i]);
         }
-
         //printf("\n");
+    }
+    //printf("\n");
 
-        char plainText[strlen(argv[2])];
-        char secretCode[strlen(argv[1])];
-        strcpy(plainText, argv[2]);
-        strcpy(secretCode, argv[1]);
-        encryptMessage(plainText, secretCode);
-        printf("Encrypted: %s\n", plainText+1);
-        return -1;
+    char key[strlen(argv[1])];
+    char signature[strlen(argv[2])];
+
+    strcpy(key, argv[1]);
+    strcpy(signature, argv[2]);
+
+    if(*argv[2] == '%'){ 
+        processSignature(signature, key, 'e');
+        printf("Encrypted: %s\n", signature+1);
+    } else {
+        processSignature(signature, key, 'd');
+        printf("Decrypted: %s\n", signature+1);
     }
 
-    char encrypted[strlen(argv[3])];
-    char secretCode[strlen(argv[2])];
-    strcpy(encrypted, argv[3]);
-    strcpy(secretCode, argv[2]);
-    decryptMessage(encrypted, secretCode);
-    printf("Decrypted: %s\n", encrypted);
-    return -1;
 }
 
 /* return: 1 if worked, 0 elsewise 
  * 
  */
-int encryptMessage(char * plain, char * secret){
+int processSignature(char * signature, char * key, char mode){
     //l    loop thru message
-    int i = 1;
-    if(strlen(plain) == 0 || strlen(secret) == 0)
+    int i;
+    if(strlen(signature) == 0 || strlen(key) == 0)
         return 0;
+    i = (mode == 'e'?1:0);
 
-    while(i < strlen(plain)){
-        plain[i] = encryptLetter(&plain[i]);
-        i++;
-    }
-    return 1;
-}
-
-/* return: 1 if worked, 0 elsewise 
- * 
- */
-int decryptMessage(char * encrypted, char * secret){
-    int i = 0;
-    if(strlen(encrypted) == 0 || strlen(secret) == 0)
-        return 0;
-
-    while(i < strlen(encrypted)){
-        int index = decipherLetter(encrypted[i], secret[i%strlen(secret)]);
-        char letter = alphabet[index];
-        encrypted[i] = letter;
+    while(i < strlen(signature)){
+        if(mode == 'e'){
+            signature[i] = encryptLetter(&signature[i]);
+        } else {
+            //signature[i] = decipherLetter(&signature[i]);
+        }
         i++;
     }
     return 1;
