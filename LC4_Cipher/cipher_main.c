@@ -3,11 +3,10 @@
 #include <string.h>
 #include <ctype.h>
 
-char * alphabet = "abcdefghijklmnopqrstuvwxyz";
-const int L_CHAR_OFFSET = 97;
-char decipherLetter(int cypText, int keyText);
+char decipherLetter(char * pt);
 char encryptLetter(char * plain);
 int processSignature(char * signature, char * key, char mode);
+char processLetter(char * pl, char mode);
 
 void setCharLocation(int * x, int * y, char * plain);
 int getCharValue(char * c);
@@ -27,8 +26,11 @@ struct marker {
 
 
 int main(int argc, char * argv[]){
-    //TODO merge behaviour using dynamic argument locations
-    //first step: put methods into own functions like initBoard?
+    if(argc < 3){
+        printf("%s", "Proper program use: ./a.out key \%plain\n ./a.out key encrypted\n");
+        return 0;
+    }
+
     mark.x = 0;
     mark.y = 0;
 
@@ -36,11 +38,8 @@ int main(int argc, char * argv[]){
     for(int i = 0; i < 6; i++){
         for(int j = 0; j < 6; j++){
             board[j][i] = argv[1][i*6 + j];
-            //printf("%c", board[j][i]);
         }
-        //printf("\n");
     }
-    //printf("\n");
 
     char key[strlen(argv[1])];
     char signature[strlen(argv[2])];
@@ -53,7 +52,7 @@ int main(int argc, char * argv[]){
         printf("Encrypted: %s\n", signature+1);
     } else {
         processSignature(signature, key, 'd');
-        printf("Decrypted: %s\n", signature+1);
+        printf("Decrypted: %s\n", signature);
     }
 
 }
@@ -62,47 +61,53 @@ int main(int argc, char * argv[]){
  * 
  */
 int processSignature(char * signature, char * key, char mode){
-    //l    loop thru message
     int i;
     if(strlen(signature) == 0 || strlen(key) == 0)
         return 0;
+    //offset command flag
     i = (mode == 'e'?1:0);
 
     while(i < strlen(signature)){
-        if(mode == 'e'){
-            signature[i] = encryptLetter(&signature[i]);
-        } else {
-            //signature[i] = decipherLetter(&signature[i]);
-        }
+        signature[i] = processLetter(&signature[i], mode);
         i++;
     }
     return 1;
 }
 
-char encryptLetter(char * plain){
-    int plainX;
-    int plainY; 
-    setCharLocation(&plainX, &plainY, plain);
-    int markVal = getCharValue(&board[mark.x][mark.y]);
+char processLetter(char * pl, char mode){
+    int plainX, plainY, cipherX, cipherY;
+    char ret;
 
+    int markVal = getCharValue(&board[mark.x][mark.y]);
     int markIncX = markVal%6;
     int markIncY = markVal/6;
 
-    int cipherX = (plainX + markIncX)%6;
-    int cipherY = (plainY + markIncY)%6;
+    //use plain to get enc
+    if(mode == 'e'){
+        setCharLocation(&plainX, &plainY, pl);
+        cipherX = (plainX + markIncX)%6;
+        cipherY = (plainY + markIncY)%6;
+        ret = board[cipherX][cipherY];
+    //use enc to get plain 
+    } else {
+        setCharLocation(&cipherX, &cipherY, pl);
+        plainX = (cipherX + (-markIncX))%6;
+        plainY = (cipherY + (-markIncY))%6;
+        //handle C's negative remainder behaviour
+        plainX = (plainX < 0) ? 6 - abs(plainX): plainX;  
+        plainY = (plainY < 0) ? 6 - abs(plainY): plainY;  
+        ret = board[plainX][plainY];
+    }
 
-    char enc = board[cipherX][cipherY];
-
-    int ciphVal = getCharValue(&enc);
+    int ciphVal = getCharValue(&board[cipherX][cipherY]);
     int ciphIncX = ciphVal%6;
     int ciphIncY = ciphVal/6;
 
-    //shift row according to algorithm, Y for row start, X for col start
-
+    //according to algorithm, Y for row start, X for col start
     shiftRow(&plainY);
     //prevent row shift from misaligning stored cipher location
     if(cipherY == plainY){
-        cipherX++;
+        cipherX = (cipherX+1)%6;
     }
     shiftCol(&cipherX);
 
@@ -110,18 +115,10 @@ char encryptLetter(char * plain){
     mark.x = (mark.x + ciphIncX)%6;
     mark.y = (mark.y + ciphIncY)%6;
 
-    //    printState(plain, &enc);
-    return enc;
+    return ret;
 }
 
-char decipherLetter(int cypText, int keyText){
-    int cyp = cypText-L_CHAR_OFFSET;
-    int key = keyText-L_CHAR_OFFSET;
-    int r = (cyp - key) % 26;  
-    //handle C's remainder behaviour
-    return (r < 0) ? 26 - abs(r): r; 
-}
-
+//based on LC4 alphabet and C offsets
 int getCharValue(char * c){
     if(*c <= '9' && *c >= '2')
         return *c - '2' + 2;
