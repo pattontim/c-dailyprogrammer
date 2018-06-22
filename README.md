@@ -5,10 +5,11 @@ Here are my C implementations of the challenges.
 
 Completed: 
 
-##Intermediate
+#Intermediate
+
 [ElsieFour (LC4) Encryption and Decryption](https://www.reddit.com/r/dailyprogrammer/comments/8jvbzg/20180516_challenge_361_intermediate_elsiefour/)
 
-##Easy
+#Easy
 
 [Counting series of repeating digits.](https://www.reddit.com/r/dailyprogrammer/comments/7eh6k8/20171121_challenge_341_easy_repeating_numbers/)
 
