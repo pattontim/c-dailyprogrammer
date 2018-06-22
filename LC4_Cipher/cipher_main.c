@@ -3,8 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 
-char decipherLetter(char * pt);
-char encryptLetter(char * plain);
 int processSignature(char * signature, char * key, char mode);
 char processLetter(char * pl, char mode);
 
