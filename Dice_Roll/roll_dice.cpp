@@ -8,6 +8,9 @@ int main() {
   std::string input;
   std::string delimiter = "d";
 
+  //only call once.
+  srand(time(NULL));
+
   int rolls;
   int faces;
 
@@ -17,20 +20,21 @@ int main() {
     faces = stoi(input.substr(input.find(delimiter)+1, input.length()));
     rolls = stoi(input.substr(0, input.find(delimiter)));
 
-    // std::cout << faces << std::endl;
-    // std::cout << rolls << std::endl;
     std::cout << rollDie(rolls, faces) << std::endl;
   }
 }
 
 std::string rollDie(int & rolls, int & faces){
   // std::cout << rolls << " " << faces << std::endl;
-  int tosses[rolls];
+  // int tosses[rolls];
   int sum = 0;
+  std::string output = "";
   for(int i = 0; i < rolls; i++){
-    tosses[i] = rand() % faces+1;
+    // tosses[i] = rand() % faces+1;
+    int r = rand() % faces + 1;
+    output += " " + std::to_string(r);
     // std::cout << "Adding random roll: " << tosses[i] << std::endl;
-    sum += tosses[i];
+    sum += r;
   }
-  return std::to_string(sum);
+  return std::to_string(sum) + ":" + output;
 }
