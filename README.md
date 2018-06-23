@@ -24,3 +24,5 @@ Completed:
 [Seven Fragment Display Parser](https://www.reddit.com/r/dailyprogrammer/comments/8eger3/20180423_challenge_358_easy_decipher_the_seven/)
 
 [Tally Game Score Counter](https://www.reddit.com/r/dailyprogrammer/comments/8jcffg/20180514_challenge_361_easy_tally_program/)
+
+[D&D Dice Roller](https://www.reddit.com/r/dailyprogrammer/comments/8s0cy1/20180618_challenge_364_easy_create_a_dice_roller/)
