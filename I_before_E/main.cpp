@@ -7,13 +7,14 @@ bool check(std::string word);
 
 int main(){
 //test cases
- std::cout << check("fiery");
- std::cout << check("ceiling");
- std::cout << check("programmer");
- std::cout << check("sleigh");
- std::cout << check("nuclei");
- std::cout << check("reimburse");
+ // std::cout << check("fiery");
+ // std::cout << check("ceiling");
+ // std::cout << check("programmer");
+ // std::cout << check("sleigh");
+ // std::cout << check("nuclei");
+ // std::cout << check("reimburse");
 
+ //check database for accordance with I before E
   std::string line;
   std::ifstream myfile ("english.txt");
   int exc = 0;
@@ -26,15 +27,12 @@ int main(){
   }
   else std::cout << "Unable to open file" << std::endl;
 
-
   std::cout << std::endl << exc << std::endl;
   return 0;
-
- //check all english words
 }
 
 bool check(std::string word) {
-  //TODO search all instances in words
+  //convert source to lowercase
   std::transform(word.begin(), word.end(), word.begin(), ::tolower);
 
   if(word.find("cie") != -1)
