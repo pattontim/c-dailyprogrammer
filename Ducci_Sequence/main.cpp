@@ -2,16 +2,15 @@
 #include <iostream>
 #include <array>
 
-//Like saying, this will take any size, we make the size generic at compile time
 template<std::size_t SIZE>
 void advanceDucci(std::array<int, SIZE> & seq);
 
-//see if template will work with args
 template<std::size_t SIZE>
 void printDucci(std::array<int, SIZE> & seq);
 
 template<std::size_t SIZE>
 void advanceDucci(std::array<int, SIZE> & seq) {
+  //handle loop around behaviour
   int first = seq[0];
   for(int i = 0; i < seq.size() - 1; i++)
     seq[i] = abs(seq[i] - seq[i+1]);
@@ -30,17 +29,17 @@ void printDucci(std::array<int, SIZE> & seq) {
 
 template<std::size_t SIZE>
 bool binaryDucci(std::array<int, SIZE> & seq) {
-  int boolVal = -1;
+  //for zero array and first value
+  int first = -1;
   for(int i = 0; i < seq.size(); i++){
     while(seq[i] == 0)
       i++;
-    if(boolVal == -1)
-      boolVal = seq[i];
-    if(seq[i] != 0 && seq[i] != boolVal)
+    if(first == -1)
+      first = seq[i];
+    if(seq[i] != 0 && seq[i] != first)
       return false;
   }
-  // if(boolVal == 0)
-    return true;
+  return true;
 }
 
 int main(){
@@ -48,7 +47,8 @@ int main(){
   printDucci(sequence);
   int i = 1;
 
-  while(!binaryDucci(sequence) && i < 30){
+  //Enters the binary phase of the Ducci sequence
+  while(!binaryDucci(sequence)){
     advanceDucci(sequence);
     printDucci(sequence);
     i++;
@@ -59,6 +59,7 @@ int main(){
   advanceDucci(sequence);
   printDucci(sequence);
   i++;
+  //begins to look for pattern according to first
   while(sequence != pattern && sequence != zero){
     advanceDucci(sequence);
     printDucci(sequence);
