@@ -9,6 +9,8 @@ Completed:
 
 [ElsieFour (LC4) Encryption and Decryption](https://www.reddit.com/r/dailyprogrammer/comments/8jvbzg/20180516_challenge_361_intermediate_elsiefour/)
 
+[Ducci Sequence Solver/The Diffy Game](https://www.reddit.com/r/dailyprogrammer/comments/8sjcl0/20180620_challenge_364_intermediate_the_ducci/)
+
 #Easy
 
 [Counting series of repeating digits.](https://www.reddit.com/r/dailyprogrammer/comments/7eh6k8/20171121_challenge_341_easy_repeating_numbers/)
