@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <array>
+#include "ducci.h"
 
 template<std::size_t SIZE>
 void advanceDucci(std::array<int, SIZE> & seq);
@@ -44,6 +45,7 @@ bool binaryDucci(std::array<int, SIZE> & seq) {
 
 int main(){
   std::array<int, 5> sequence = {10, 12, 41, 62, 31};
+  std::array<int, 5> zero = {0, 0, 0, 0};
   printDucci(sequence);
   int i = 1;
 
@@ -54,7 +56,6 @@ int main(){
     i++;
   }
   std::array<int, 5> pattern = sequence;
-  std::array<int, 5> zero = {0, 0, 0, 0};
 
   advanceDucci(sequence);
   printDucci(sequence);
