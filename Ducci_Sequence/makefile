@@ -1,5 +1,5 @@
 ducci: main.cpp
-	g++ -std=c++11 -o ducci.o main.cpp ducci.cpp -I.
+	g++ -std=c++11 -o ducci.o ducci.cpp main.cpp -I.
 clean:
 	rm ducci.o 
 

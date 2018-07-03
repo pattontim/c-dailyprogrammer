@@ -1,4 +1,5 @@
 #include <vector>
+#include <cmath>
 
 class Ducci {
   int sides;
@@ -9,7 +10,7 @@ public:
   Ducci(std::vector<int> v);
   //is a constructor with unlimited argument possible? Aka with no vector medium, just values? ex Ducci(100, 100, ...)
 
-  bool addSide(int value);
+  void addSide(int value);
   bool setSide(int index, int value);
   int getSide(int index);
   bool removeSide(int index);

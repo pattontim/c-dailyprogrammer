@@ -1,4 +1,3 @@
-#include <cmath>
 #include <iostream>
 #include <array>
 #include "ducci.h"
@@ -67,4 +66,10 @@ int main(){
     i++;
   }
   std::cout << i << " steps" << std::endl;
+
+  Ducci d;
+  d.addSide(10);
+  d.addSide(10);
+  d.addSide(10);
+
 }
