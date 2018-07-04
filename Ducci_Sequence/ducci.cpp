@@ -17,10 +17,12 @@ bool Ducci::removeSide(int index){
 }
 void Ducci::advance(){
   int first = getSide(0);
-  for(int i = 0; i < seq.size() - 1; i++)
+  for(int i = 0; i < seq.size() - 1; i++) {
     setSide(i, std::abs(seq[i] - seq[i+1]));
+  }
   //why is std required here but not in main?
   setSide(seq.size() - 1, std::abs(seq[seq.size()-1] - first));
+  stage++;
 }
 bool Ducci::isBinary(){
   //for zero array and first value
@@ -34,4 +36,16 @@ bool Ducci::isBinary(){
       return false;
   }
   return true;
+}
+int Ducci::getStage(){
+  return stage;
+}
+
+std::ostream & operator<<(std::ostream & strm, const Ducci & d){
+  strm << "[";
+  std::vector<int>::const_iterator duc_iter;
+  for(duc_iter = d.seq.begin(); duc_iter != d.seq.end()-1; duc_iter++){
+    strm << *duc_iter << ", ";
+  }
+  return strm << *(duc_iter) << "]" << std::endl;
 }

@@ -1,9 +1,12 @@
 #include <vector>
 #include <cmath>
+#include <iostream>
 
 class Ducci {
   int sides;
+  int stage;
   std::vector<int> seq;
+  friend std::ostream & operator<<(std::ostream &, const Ducci &);
 
 public:
   Ducci();
@@ -16,4 +19,5 @@ public:
   bool removeSide(int index);
   void advance();
   bool isBinary();
+  int getStage();
 };
