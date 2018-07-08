@@ -1,12 +1,14 @@
 #include <vector>
 #include <cmath>
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
-class Ducci {
+class Ducci : public sf::Drawable, sf::Transformable {
   int sides;
   int stage;
   std::vector<int> seq;
   friend std::ostream & operator<<(std::ostream &, const Ducci &);
+  virtual void draw(sf::RenderTarget & target, sf::RenderStates states) const;
 
 public:
   Ducci();
@@ -20,4 +22,7 @@ public:
   void advance();
   bool isBinary();
   int getStage();
+  int getLargest();
+  std::vector<int> getSequence();
+  void drawLargest(sf::RenderTarget & target, sf::RenderStates states);
 };

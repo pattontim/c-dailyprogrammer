@@ -3,3 +3,4 @@ Game_of_life/
 *.swp
 Worm_Wars
 *.o
+sfml-app
