@@ -28,9 +28,16 @@ void Ducci::draw(sf::RenderTarget & target, sf::RenderStates states) const {
 
 void Ducci::drawLargest(sf::RenderTarget & target, sf::RenderStates states) {
   int largest = getLargest();
-  sf::CircleShape shape(largest, sides);
-  //TODO find out how to centre triangle
-  // shape.setPosition(1854/4, 1854/4);
+  sf::CircleShape shape(largest/2, sides);
+  sf::FloatRect triRect = shape.getLocalBounds();
+  shape.setOrigin(triRect.left + triRect.width/2.0f, triRect.top + triRect.height/2.0f);
+  shape.setPosition(sf::Vector2f(target.getSize().x/2.0f, target.getSize().y/2.0f));
+
+  std::random_device rd;
+  std::mt19937 mt(rd());
+  std::uniform_real_distribution<double> dist(1.0, 255.0);
+  shape.setFillColor(sf::Color(dist(mt), dist(mt), dist(mt)));
+  // shape.rotate(10);
   target.draw(shape);
 }
 

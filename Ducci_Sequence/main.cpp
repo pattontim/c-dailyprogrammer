@@ -3,35 +3,41 @@
 #include "ducci.h"
 #include <unistd.h>
 
+const int SCREEN_WIDTH = 1920;
+const int SCREEN_HEIGHT = 1080;
+
 int main(){
   //Window stuff
-  sf::RenderWindow window(sf::VideoMode(1920, 1080), "Ducci Sequence");
+  sf::ContextSettings settings;
+  settings.antialiasingLevel = 8;
 
-  std::vector<int> sequence = {0, 653, 1854};
+  sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Ducci Sequence", sf::Style::Default, settings);
+
+  std::vector<int> sequence = {0, 653, 10000};
   std::vector<int> zero = {0, 0, 0};
   Ducci d(sequence);
 
   int largest = d.getLargest();
-  sf::View max(sf::FloatRect(0, 0, largest, largest));
-  // sf::View max(sf::Vector2f(largest/2, largest/2), sf::Vector2f(largest, largest));
-  // max.setSize(largest, largest);
-  // max.setViewport(sf::FloatRect(0.25f, 0.25, 0.5f, 0.5f));
+  sf::View max;
+  max.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
+
+  max.zoom(largest/SCREEN_HEIGHT);
 
   window.setView(max);
-  window.clear();
+
 
   //pass in RenderTarget and RenderStates
-
   while (window.isOpen()) {
       sf::Event event;
       while (window.pollEvent(event)) {
           if (event.type == sf::Event::Closed)
               window.close();
       }
-      window.clear();
-      d.drawLargest(window, sf::RenderStates::Default);
-      sleep(1);
+      // window.clear();
       d.advance();
+      usleep(100000);
+      d.drawLargest(window, sf::RenderStates::Default);
+      std::cout << d;
       window.display();
   }
 

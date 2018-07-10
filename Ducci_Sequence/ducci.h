@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <random>
 
 class Ducci : public sf::Drawable, sf::Transformable {
   int sides;
