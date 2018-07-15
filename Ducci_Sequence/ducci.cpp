@@ -1,11 +1,14 @@
 //TODO declare const methods...
 #include "ducci.h"
+#include "utility.h"
 
-Ducci::Ducci(){ seq = {}; sides = 1;}
+Ducci::Ducci(){ seq = {}; sides = 1; firstSeq = {}; zero = std::vector<int>(sides, 0);}
 Ducci::Ducci(std::vector<int> v){
   seq = v;
   stage = 1;
   sides = v.size();
+  firstSeq = {};
+  zero = std::vector<int>(sides, 0);
 }
 
 void Ducci::addSide(int value){
@@ -23,7 +26,32 @@ int Ducci::getSide(int index){
 bool Ducci::removeSide(int index){
 }
 
+void Ducci::populate(int cx, int cy){
+  vertices = sf::VertexArray(sf::TrianglesFan, 3);
+  if(sides < 3){
+    //do nothing
+  }
+  else if(sides == 3) {
+  } else {
+
+  }
+  vertices.clear();
+  // sf::Vector2f centre(cx, cy);
+  vertices.append(sf::Vertex(sf::Vector2f(cx, cy-seq[0])));
+  vertices.append(sf::Vertex(sf::Vector2f(round(cx+(sin(Utility::degreeToRad(60))*seq[1])), round(cy+(sin(Utility::degreeToRad(30))*seq[1])))));
+  vertices.append(sf::Vertex(sf::Vector2f(round(cx-(cos(Utility::degreeToRad(30))*seq[2])), round(cy+(sin(Utility::degreeToRad(30))*seq[2])))));
+
+  std::random_device rd;
+  std::mt19937 mt(rd());
+  std::uniform_real_distribution<double> dist(1.0, 255.0);
+  vertices[0].color = sf::Color(dist(mt), dist(mt), dist(mt));
+  vertices[1].color = sf::Color(dist(mt), dist(mt), dist(mt));
+  vertices[2].color = sf::Color(dist(mt), dist(mt), dist(mt));
+
+}
+
 void Ducci::draw(sf::RenderTarget & target, sf::RenderStates states) const {
+  target.draw(vertices);
 }
 
 void Ducci::drawLargest(sf::RenderTarget & target, sf::RenderStates states) {
@@ -41,7 +69,7 @@ void Ducci::drawLargest(sf::RenderTarget & target, sf::RenderStates states) {
   target.draw(shape);
 }
 
-void Ducci::advance(){
+void Ducci::advancePrimitive(){
   int first = getSide(0);
 
   std::vector<int>::iterator duc_iter;
@@ -59,14 +87,42 @@ bool Ducci::isBinary(){
   int first = -1;
   std::vector<int>::iterator duc_iter;
   //use iter difference
-  for(duc_iter = seq.begin(); duc_iter < seq.end(); duc_iter++){
-    while(*duc_iter == 0)
+  for(duc_iter = seq.begin(); duc_iter != seq.end(); duc_iter++){
+    while(*duc_iter == 0 && first == -1)
       duc_iter++;
-    if(first == -1)
+    if(first == -1){
       first = *duc_iter;
-    if(*duc_iter != 0 && *duc_iter != first)
+      // std::cout << "Setting first: " << first << std::endl;
+    }
+    if(*duc_iter != 0 && *duc_iter != first){
+      // std::cout << "Returning false when *duc_iter = " << *duc_iter << std::endl;
       return false;
+    }
   }
+  return true;
+}
+
+bool Ducci::advance(){
+  if(!isBinary()){
+    // std::cout << "is not binary" << std::endl;
+    advancePrimitive();
+  } else if (seq == zero || seq == firstSeq){
+    return false;
+  } else {
+    if(firstSeq.empty()){
+      //TODO checking against first sequence
+      firstSeq = seq;
+      // std::cout << "Setting first sequence: " << this << std::endl;
+      // std::vector<int>::iterator duc_iter;
+      // //use iter difference as i
+      // for(duc_iter = seq.begin(); duc_iter < seq.end(); duc_iter++){
+      //   // setSide(duc_iter - seq.begin(), std::abs(*duc_iter - *(duc_iter + 1)));
+      //   std::cout << *duc_iter << ", ";
+      // }
+    }
+    advancePrimitive();
+  }
+  // std::cout << firstSeq << std::endl;
   return true;
 }
 

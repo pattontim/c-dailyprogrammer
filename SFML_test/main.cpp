@@ -6,12 +6,13 @@ int main(){
 
   // sf::CircleShape shape(80, 3);
   sf::Vertex vertex(sf::Vector2f(10, 50), sf::Color::Red, sf::Vector2f(100, 100)  );
-  sf::VertexArray triangle(sf::Triangles, 3);
+  sf::VertexArray triangle(sf::TrianglesFan, 4);
 
   // define the position of the triangle's points
-  triangle[0].position = sf::Vector2f(10, 10);
+  triangle[0].position = sf::Vector2f(20, 20);
   triangle[1].position = sf::Vector2f(100, 10);
   triangle[2].position = sf::Vector2f(100, 100);
+  triangle[3].position = sf::Vector2f(80, 150);
   // define the color of the triangle's points
   triangle[0].color = sf::Color::Red;
   triangle[1].color = sf::Color::Blue;
