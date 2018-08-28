@@ -21,6 +21,9 @@ int main(){
   Ducci d;
   resetDefaults(d);
 
+  int largest = d.getLargest();
+  double scalefactor = 1+((largest*1.25)/SCREEN_HEIGHT);
+
   //Text and buttons
   sf::Font font;
   if(!font.loadFromFile("inconsolata.ttf")){
@@ -45,17 +48,17 @@ int main(){
   // sf::CircleShape shape(5);
   // shape.setPosition(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 
-  int largest = d.getLargest();
   sf::View max;
   max.reset(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
 
   //scale largest based on screen height
-  if(largest*2 > SCREEN_HEIGHT)
-     max.zoom(2-(largest*2/SCREEN_HEIGHT));
+  if(largest*2 > SCREEN_HEIGHT){
+    max.zoom(scalefactor);
+  }
+
   window.setView(max);
 
   d.populate(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
-
   //pass in RenderTarget and RenderStates
   while (window.isOpen()) {
       // window.clear();
@@ -66,8 +69,11 @@ int main(){
               window.close();
           if(event.mouseButton.button == sf::Mouse::Left){
             // window.clear();
+            window.setView(max);
             std::cout << event.mouseButton.x << " " << event.mouseButton.y << std::endl;
             if(largeButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)){
+              window.clear();
+              window.display();
               do {
                 usleep(100000);
                 d.drawLargest(window, sf::RenderStates::Default);
@@ -76,6 +82,8 @@ int main(){
               } while (d.advance());
                 usleep(1000000);
               } else if(defaultButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
+                window.clear();
+                window.display();
                 do{
                   window.draw(d);
                   // window.draw(shape);
@@ -90,6 +98,7 @@ int main(){
             }
       }
       resetDefaults(d);
+      window.setView(window.getDefaultView());
       window.draw(largeButton);
       window.draw(largeText);
       window.draw(defaultButton);
@@ -104,6 +113,6 @@ int main(){
 }
 
 void resetDefaults(Ducci & duc){
-  std::vector<int> reset = {700, 643, 345};
+  std::vector<int> reset = {1000, 643, 345};
   duc = Ducci(reset);
 }

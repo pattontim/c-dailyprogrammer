@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
-int processSignature(char * signature, char * key, char mode);
+int processSequence(char * signature, char * key, char mode);
 char processLetter(char * pl, char mode);
 
 void setCharLocation(int * x, int * y, char * plain);
@@ -45,11 +45,13 @@ int main(int argc, char * argv[]){
     strcpy(key, argv[1]);
     strcpy(signature, argv[2]);
 
+    //char argument = args[2];
+
     if(*argv[2] == '%'){ 
-        processSignature(signature, key, 'e');
+        processSequence(signature, key, 'e');
         printf("Encrypted: %s\n", signature+1);
     } else {
-        processSignature(signature, key, 'd');
+        processSequence(signature, key, 'd');
         printf("Decrypted: %s\n", signature);
     }
 
@@ -58,7 +60,7 @@ int main(int argc, char * argv[]){
 /* return: 1 if worked, 0 elsewise 
  * 
  */
-int processSignature(char * signature, char * key, char mode){
+int processSequence(char * signature, char * key, char mode){
     int i;
     if(strlen(signature) == 0 || strlen(key) == 0)
         return 0;

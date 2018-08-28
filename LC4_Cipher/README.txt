@@ -17,7 +17,7 @@ gcc cipher_main.c
 
 to run: ./a.out key encrypted
 
-test case: ./a.out 9mlpg_to2yxuzh4387dsajknf56bi#ecwrqv grrhkajlmd3c6xkw65m3dnwl65n9op6k_o59qeq
+test case: ./a.out 9mlpg_to2yxuzh4387dsajknf56bi#ecwrqv grrhkajlmd3c6xkw65m3dnwl65n9op6k_o59qeq.
 sample output: Decrypted: congratulations_youre_a_dailyprogrammer
 
 Known issues: 
