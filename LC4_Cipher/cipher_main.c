@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
-int processSequence(char * signature, char * key, char mode);
+int processSequence(char * key, char * sequence, char * signature, char * header, char mode);
 char processLetter(char * pl, char mode);
 
 void setCharLocation(int * x, int * y, char * plain);
@@ -35,41 +35,66 @@ int main(int argc, char * argv[]){
     //init board
     for(int i = 0; i < 6; i++){
         for(int j = 0; j < 6; j++){
-            board[j][i] = argv[1][i*6 + j];
+            board[j][i] = argv[2][i*6 + j];
         }
     }
 
-    char key[strlen(argv[1])];
-    char signature[strlen(argv[2])];
+    char argument = *argv[1];
 
-    strcpy(key, argv[1]);
-    strcpy(signature, argv[2]);
-
-    //char argument = args[2];
-
-    if(*argv[2] == '%'){ 
-        processSequence(signature, key, 'e');
-        printf("Encrypted: %s\n", signature+1);
-    } else {
-        processSequence(signature, key, 'd');
-        printf("Decrypted: %s\n", signature);
-    }
-
+    if(argc >= 4){
+        char key[strlen(argv[2])+1];
+        char sequence[strlen(argv[3])+1];
+        char signature[11];
+        char header[17];
+        
+        //why is this undefined behaviour?
+        //key[0] = sequence[0] = signature[0] = header[0] = '\0';
+        strcpy(key, argv[2]);
+        strcpy(sequence, argv[3]);
+        strcpy(signature, "");
+        strcpy(header, "");
+        if(argc >= 5 && argc <= 6){
+            if(argument == 's' && strlen(argv[4]) == 10){
+                strcpy(signature, argv[4]);
+                strcpy(header, argv[5]);
+            } else if(argument == 'u' && strlen(argv[4]) == 16) {
+                strcpy(header, argv[4]);
+            } else {
+                //erroneous input
+                return -1;
+            }
+        }
+        //printf("key: %s\n", key);
+        //printf("sequence: %s\n", sequence);
+        //printf("signature: %s\n", signature);
+        //printf("header: %s\n", header);
+        processSequence(key, sequence, signature, header, argument);
+        printf("Result: %s\n", sequence);
+        }
 }
 
 /* return: 1 if worked, 0 elsewise 
  * 
  */
-int processSequence(char * signature, char * key, char mode){
-    int i;
-    if(strlen(signature) == 0 || strlen(key) == 0)
-        return 0;
-    //offset command flag
-    i = (mode == 'e'?1:0);
-
-    while(i < strlen(signature)){
-        signature[i] = processLetter(&signature[i], mode);
-        i++;
+int processSequence(char * key, char * sequence, char * signature, char * header, char mode){
+    int i = 0;
+    switch(mode){
+        case 'e':
+        case 'd':
+            while(i < strlen(sequence)){
+                char val = processLetter(&sequence[i], mode); 
+                sequence[i] = val;
+                i++;
+            }       
+            break;
+        case 's':
+        case 'u':
+            //set state after nonce generation
+            //restart with e and d as necessary and set signature?
+            break;
+        default:
+            //lolol
+            break;
     }
     return 1;
 }

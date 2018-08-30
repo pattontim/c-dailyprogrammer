@@ -4,3 +4,4 @@ Game_of_life/
 Worm_Wars
 *.o
 sfml-app
+solution.py
