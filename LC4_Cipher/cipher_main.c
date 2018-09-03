@@ -60,7 +60,6 @@ int main(int argc, char * argv[]){
 			} else if(argument == 'u' && strlen(argv[4]) == 16) {
 				strcpy(header, argv[4]);
 			} else {
-				//erroneous input
 				return -1;
 			}
 		} else if(argc == 6){
@@ -71,15 +70,8 @@ int main(int argc, char * argv[]){
                 return -1;
             }
         }
-		//printf("key: %s\n", key);
-		//printf("sequence: %s\n", sequence);
-		//printf("signature: %s\n", signature);
-		//printf("header: %s\n", header);
-
 		processSequence(key, sequence, signature, header, argument);
 		printf("Result: %s%s\n", sequence, signature);
-		//processSequence(key, sequence, signature, header, 'u');
-		//printf("Result: %s%s\n", sequence, signature);
 	}
 }
 
@@ -87,11 +79,12 @@ int main(int argc, char * argv[]){
  *
  */
 int processSequence(char * key, char * sequence, char * signature, char * header, char mode){
-	int i = 0;
-    int j = 0;
 	switch(mode){
 		case 'e':
 		case 'd': {
+            int i = 0;
+
+            //determine if request originated from ign/unsign
             if(strlen(signature) == 0){
 			    setState(key, "", "");
             }
@@ -108,83 +101,74 @@ int processSequence(char * key, char * sequence, char * signature, char * header
             }
         } break;
 		case 's': {
+            int i = 0;
+            char buf[strlen(sequence)];
+	        char nonce[7];
 
+            //set state
             seed_rng(); 
-            //0 to 35
-	        //char nonce[7];
-            char * nonce = "abcdef";
-            /*for(int i = 0; i < 6; i++){
+            for(int i = 0; i < 6; i++){
+                //0 to 35 inclusive
                 nonce[i] = boardIndex[rand() % 36];
-            }*/
-            //generate characters randomly based on 
-            printf("pre set state\n");
-            setState(key, nonce, header);
-            printf("processed state...\n");
-            processSequence(key, sequence, signature, header, 'e');
-            printf("After processing signed\n");
-            printf("key: %s\n", key);
-		    printf("sequence: %s\n", sequence);
-		    printf("signature: %s\n", signature);
-		    printf("header: %s\n", header);
-
-            char s_buf[strlen(sequence)];
-            strcpy(s_buf, sequence); 
-            
-            j = 0;
-            while(j < NONCE_SIZE){
-                sequence[j] = nonce[j];
-                j++;
             }
-            while(j < NONCE_SIZE+strlen(s_buf)){
-                sequence[j] = s_buf[j-NONCE_SIZE];
-                j++;
+            setState(key, nonce, header);
+
+            processSequence(key, sequence, signature, header, 'e');
+
+            
+            //sanitize output
+            strcpy(buf, sequence); 
+            i = 0;
+            while(i < NONCE_SIZE){
+                sequence[i] = nonce[i];
+                i++;
+            }
+            while(i < NONCE_SIZE+strlen(buf)){
+                sequence[i] = buf[i-NONCE_SIZE];
+                i++;
             }
         } break;
 
 		case 'u': {
             int sigOffset = strlen(sequence)-SIGNATURE_SIZE;
-
-            char nonce[NONCE_SIZE];
+            char s_buf[sigOffset-NONCE_SIZE+1], nonce[NONCE_SIZE];
             int i = 0;
+
+            //extract nonce
             while(i < NONCE_SIZE){
                 nonce[i] = sequence[i]; 
                 i++;
             }
-            printf("Nonce: %s\n", nonce);
+
+            //according to presence of extracted nonce and header
             setState(key, nonce, header);
-            char s_buf[sigOffset-NONCE_SIZE+1];
+
+            //extract sequence
             while(i < sigOffset){
                 s_buf[i-NONCE_SIZE] = sequence[i];
                 i++;
             }
+
+            //extract signature
             while(i < strlen(sequence)){
                 signature[i-sigOffset] = sequence[i];
                i++;
             }
+            
+            //set up input for processing
             signature[i-sigOffset] = '\0';
             strcpy(sequence, s_buf);
-		    printf("sequence before: %s\n", sequence);
-		    printf("signature before: %s\n", signature);
-		    printf("header before: %s\n", header);
+
+
             processSequence(key, sequence, signature, header, 'd');
-            //sequence[strlen(sequence)] = ' ';
+
+            //sanitize for printing
             sequence[strlen(sequence)+1] = '\0';
             sequence[strlen(sequence)] = ' ';
-            printf("--- After processing signed text ---\n");
-            printf("key: %s\n", key);
-		    printf("sequence: %s\n", sequence);
-		    printf("signature: %s\n", signature);
-		    printf("header: %s\n", header);
 
-
-
-            //seq in the end should be [unenc][unenc-sig], if I pass them both in it will go into the result but I have to clear the signature from the result
-			//restart with e and d as necessary and set signature?
         } break;
 		default:
             break;
-		    //lolol
-           // break;
 	}
 	return 1;
 }
