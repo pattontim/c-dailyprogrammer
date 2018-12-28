@@ -33,7 +33,7 @@ to run: ./a.out s key plain signature <header>
 
 no header test case: ./a.out s xv7ydq#opaj_39rzut8b45wcsgehmiknf26l im_about_to_put_the_hammer_down lrubberduc
 no header sample output: "Result: ebzeyqel8qwdzjfihpt#azbvgds94qi6h8tsk6z7b3orhfp"
-header test case:./a.out s xv7ydq#opaj_39rzut8b45wcsgehmiknf26l im_about_to_put_the_hammer_down lrubberduc abcdefgh2345678 9
+header test case:./a.out s xv7ydq#opaj_39rzut8b45wcsgehmiknf26l im_about_to_put_the_hammer_down lrubberduc abcdefgh23456789
 header sample output: "Result: 35q6wghr7ikwu_q9qib_744exjcv_mkrcemynetk4bvjqgd"
 
 -----------------------------------------------------------------

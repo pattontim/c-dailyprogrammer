@@ -1,4 +1,6 @@
-//TODO declare const methods...
+// Provides methods for calculating steps in a ducci sequence and visualization methods via SFML
+// Implements required SFML methods
+
 #include "ducci.h"
 #include "utility.h"
 
@@ -27,20 +29,17 @@ bool Ducci::removeSide(int index){
 }
 
 void Ducci::populate(int cx, int cy){
+  // TODO: add support for other shapes
   vertices = sf::VertexArray(sf::TrianglesFan, 3);
-  if(sides < 3){
-    //do nothing
-  }
-  else if(sides == 3) {
-  } else {
 
-  }
   vertices.clear();
   // sf::Vector2f centre(cx, cy);
+  // Place each point equidistant from centre
   vertices.append(sf::Vertex(sf::Vector2f(cx, cy-seq[0])));
   vertices.append(sf::Vertex(sf::Vector2f(round(cx+(sin(Utility::degreeToRad(60))*seq[1])), round(cy+(sin(Utility::degreeToRad(30))*seq[1])))));
   vertices.append(sf::Vertex(sf::Vector2f(round(cx-(cos(Utility::degreeToRad(30))*seq[2])), round(cy+(sin(Utility::degreeToRad(30))*seq[2])))));
 
+  // Generate a random colour
   std::random_device rd;
   std::mt19937 mt(rd());
   std::uniform_real_distribution<double> dist(1.0, 255.0);
@@ -54,6 +53,7 @@ void Ducci::draw(sf::RenderTarget & target, sf::RenderStates states) const {
   target.draw(vertices);
 }
 
+// Creates a triangle with all 3 sides equidistant to the largest side in the current sequence
 void Ducci::drawLargest(sf::RenderTarget & target, sf::RenderStates states) {
   int largest = getLargest();
   sf::CircleShape shape(largest/2, sides);
@@ -69,6 +69,9 @@ void Ducci::drawLargest(sf::RenderTarget & target, sf::RenderStates states) {
   target.draw(shape);
 }
 
+/*
+*   Advances the sequence to the next phase according to the algorithm.
+*/
 void Ducci::advancePrimitive(){
   int first = getSide(0);
 
@@ -77,13 +80,16 @@ void Ducci::advancePrimitive(){
   for(duc_iter = seq.begin(); duc_iter < seq.end()-1; duc_iter++){
     setSide(duc_iter - seq.begin(), std::abs(*duc_iter - *(duc_iter + 1)));
   }
-  //why is std required here but not in main?
+  //std required here but not in main, investigate
   setSide(duc_iter-seq.begin(), std::abs(*duc_iter - first));
   stage++;
 }
 
+
+/*
+*   Returns if the sequence is binary, formally k(Y,Y,Y), Y element of {1,0}.
+*/
 bool Ducci::isBinary(){
-  //for zero array and first value
   int first = -1;
   std::vector<int>::iterator duc_iter;
   //use iter difference
@@ -102,9 +108,11 @@ bool Ducci::isBinary(){
   return true;
 }
 
+/*
+*   Checks the sequence against termination conditions and advances the sequence accordingly.
+*/
 bool Ducci::advance(){
   if(!isBinary()){
-    // std::cout << "is not binary" << std::endl;
     advancePrimitive();
   } else if (seq == zero || seq == firstSeq){
     return false;
