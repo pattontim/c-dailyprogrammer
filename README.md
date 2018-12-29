@@ -21,7 +21,9 @@ Completed:
 
 [Alphabet Cipher Encoder](https://www.reddit.com/r/dailyprogrammer/comments/879u8b/20180326_challenge_355_easy_alphabet_cipher/)
 
-[Paperfold Sequence Generator](https://www.reddit.com/r/dailyprogrammer/comments/8g0iil/20180430_challenge_359_easy_regular_paperfold/)
+[Dragonfold Sequence Generator](https://www.reddit.com/r/dailyprogrammer/comments/8g0iil/20180430_challenge_359_easy_regular_paperfold/)
+
+[Kolakoski Sequence Generator](https://www.reddit.com/r/dailyprogrammer/comments/8df7sm/20180419_challenge_357_intermediate_kolakoski/)
 
 [Seven Fragment Display Parser](https://www.reddit.com/r/dailyprogrammer/comments/8eger3/20180423_challenge_358_easy_decipher_the_seven/)
 
