@@ -33,6 +33,7 @@ char * boardIndex ="#_23456789abcdefghijklmnopqrstuvwxyz";
 const int NONCE_SIZE = 6, SIGNATURE_SIZE=10, HEADER_SIZE = 16;
 
 int main(int argc, char * argv[]){
+
 	if(argc < 3){
 		printf("%s", "Proper program use: ./a.out key \%plain\n ./a.out key encrypted\n");
 		return 0;
@@ -41,6 +42,7 @@ int main(int argc, char * argv[]){
 	//setState(argv[2], "", "");
 
 	char argument = *argv[1];
+
 
 	if(argc >= 4){
 		char key[strlen(argv[2])+1];
@@ -54,6 +56,8 @@ int main(int argc, char * argv[]){
 		strcpy(sequence, argv[3]);
 		strcpy(signature, "");
 		strcpy(header, "");
+
+		// validate and set inputs
 		if(argc == 5){
 			if(argument == 's' && strlen(argv[4]) == 10){
 				strcpy(signature, argv[4]);

@@ -1,4 +1,7 @@
-Purpose: Provide an interface for basic encryption, decryption, and signing text via the ElsieFour(LC4) cipher
+Purpose: Provide an interface for basic encryption, decryption, and signing text via the ElsieFour(LC4) cipher.
+
+The program is broken down into sequence processing and letter processing functions, as well as
+functions that alter the state of the board. It relies on pointers which allows for modularization of LC4 input and output.
 
 -----------------------------------------------------------------
 Task I - Encryption 
