@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 char intIsBaumSequence(unsigned int input);
-//int firstBitSet(unsigned int input);
 char isEven(int input);
 
 int main(){
@@ -20,6 +19,7 @@ int firstBitSet(unsigned int input){
     return input & 1;
 }*/
 
+//isEven functions as both an even checker and checking if the first bit is zero.
 char isEven(int input){
     return !(input & 1);
 }
