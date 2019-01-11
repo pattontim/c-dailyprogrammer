@@ -26,6 +26,7 @@ int main(){
 
             // Erase spaces and store
             parse.erase(remove(parse.begin(),parse.end(),' '), parse.end());
+            cout << parse << endl;
             sprintf(board[i], "%s", parse.c_str());
         }
     }
@@ -36,19 +37,25 @@ int main(){
 
     // cout << &board[0][0] << endl;
     // cout << &board[1][0] << endl;
-    axisValid(n, board);
-
+    cout << axisValid(n, board) << endl;
 }
 
+bool getBitAt(int i, int n){
+    
+}
 
 bool axisValid(int n, char ** board){
     for(int i = 2; i <= n; i++){
         for(int j = 0; j<=((n-1) - i + 1); j++){
             for(int k = 0; k<=((n-1) - i + 1); k++){
-                cout << i << " " << j << " " << k << " ";
-                cout << board[j][k] << endl;
+                if(board[j][k] == board[j][k+(i-1)] 
+                && board[j][k] == board[j+(i-1)][k] 
+                && board[j][k] == board[j+(i-1)][k+(i-1)]){
+                    return false;
+                }
             }
             cout << endl;
         }
     }
+    return true;
 }
