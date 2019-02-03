@@ -1,15 +1,22 @@
+// Created by Timothy Patton on December 24, 2019 for the purposes
+// of generating axis-valid boards according to the daily programmer challenge.
+// You may view the challenge here: https://www.reddit.com/r/dailyprogrammer/comments/9z3mjk/20181121_challenge_368_intermediate_singlesymbol/
+// Works up to n=6
+
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <algorithm>
 #include <bitset>
 #include <climits>
+#include <math.h>
 
 using namespace std;
 
-bool axisValid(int size, int seq);
+bool axisValid(int size, long int seq);
 bool axisValid(int size, char ** board);
-bool getBitAt(int b, int i, int j, int n);
+bool getBitAt(long int b, int i, int j, int n);
+void printIntAsBoard(long int seq, int n);
 
 int main(){
     int n = 5;
@@ -42,7 +49,7 @@ int main(){
 
     // Conduct a test of the getBitAt function
     cout << "start: " << endl;
-    int en = 4;
+    int en = 7;
     for(int i = 0; i < en; i++){
         for(int j =0; j < en; j++){
             cout << getBitAt(17,i,j,en) << endl;
@@ -50,23 +57,25 @@ int main(){
     }
     cout << endl;
 
-    // Generates all solutions within the negative space of the function
-    // Uses a reflected binary code generator to search for axis-valid boards
-    int seq = INT32_MIN;
-    while(seq < 0){
-        if(axisValid(n, seq)){
+    // Uses a reflected binary code generator to search for an axis-valid board
+    long int seq = -(pow(2,en*en));
+    long int end = (pow(2,en*en));
+    while(seq < end){
+        if(axisValid(en, seq)){
             cout << "Answer found at: " << seq << endl;
+            printIntAsBoard(seq, en);
+            return 1;
         }
         seq++;
     }
-    cout << "solution number is: " << seq << endl;
+    // cout << "solution number is: " << seq << endl;
 }
 
 // Returns if a bit is on starting from the rightmost location and taking row dominant values as i/j
 // For example, a, b and c are the 0-th, 4-th, and 7-th bit in this implementation
 //       c  b   a
 // 10101101010101
-bool getBitAt(int b, int i, int j, int n){
+bool getBitAt(long int b, int i, int j, int n){
     if(i>n || j>n){
         return __throw_out_of_range;
     }
@@ -76,7 +85,16 @@ bool getBitAt(int b, int i, int j, int n){
     return (b >> (((n*i) + j))) & 1;
 }
 
-bool axisValid(int n, int seq){
+void printIntAsBoard(long int seq, int n){
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+            cout << getBitAt(seq,i,j,n);
+        }
+        cout << endl;
+    }
+}
+
+bool axisValid(int n, long int seq){
     for(int i = 2; i <= n; i++){
         for(int j = 0; j<=((n-1) - i + 1); j++){
             for(int k = 0; k<=((n-1) - i + 1); k++){
