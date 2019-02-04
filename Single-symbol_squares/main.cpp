@@ -18,57 +18,27 @@ bool axisValid(int size, char ** board);
 bool getBitAt(long int b, int i, int j, int n);
 void printIntAsBoard(long int seq, int n);
 
-int main(){
-    int n = 5;
+int main(int argc, char *argv[]){
+    int n = 0;
 
-    fstream boardFile("board_fail_1.txt");
-    char ** board;
-    board = new char *[n+1];
-    for(int i = 0; i < n; i++){
-        board[i] = new char[n+1];
+    if(argc < 2){
+        cout << "Please provide a board size." << endl;
+        exit(1);
     }
-
-    // Parses input board to check for solutions
-    if(boardFile.good()){
-        for(int i = 0; i < n; i++){
-            char line[n*2+1];
-            line[0] = '\n';
-            boardFile.getline(line, n*2+1);
-            string parse(line);
-
-            // Erase spaces and store
-            parse.erase(remove(parse.begin(),parse.end(),' '), parse.end());
-            cout << parse << endl;
-            sprintf(board[i], "%s", parse.c_str());
-        }
-    }
-
-    for(int i = 0; i < n; i++){
-        cout << board[i] << endl;
-    }
-
-    // Conduct a test of the getBitAt function
-    cout << "start: " << endl;
-    int en = 7;
-    for(int i = 0; i < en; i++){
-        for(int j =0; j < en; j++){
-            cout << getBitAt(17,i,j,en) << endl;
-        }
-    }
-    cout << endl;
+    
+    istringstream(argv[1]) >> n;
 
     // Uses a reflected binary code generator to search for an axis-valid board
-    long int seq = -(pow(2,en*en));
-    long int end = (pow(2,en*en));
+    long int seq = -(pow(2,n*n));
+    long int end = (pow(2,n*n));
     while(seq < end){
-        if(axisValid(en, seq)){
+        if(axisValid(n, seq)){
             cout << "Answer found at: " << seq << endl;
-            printIntAsBoard(seq, en);
-            return 1;
+            printIntAsBoard(seq, n);
+            break;
         }
         seq++;
     }
-    // cout << "solution number is: " << seq << endl;
 }
 
 // Returns if a bit is on starting from the rightmost location and taking row dominant values as i/j
