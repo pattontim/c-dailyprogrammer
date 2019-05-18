@@ -12,10 +12,10 @@ int main(int argc, char * argv[]){
         return -1;
     }
 
-    //computes required size for maximum dragonfold sequence
     int exp = 0;
     sscanf(argv[1], "%d", &exp); 
 
+    //computes required size for maximum dragonfold sequence
     char str[(int)(pow(2,exp))];
     str[0] = '\0';
 
@@ -31,9 +31,7 @@ char * dragonfold(int i, char * str) {
         return str;
     
     // Apply algorithm by appending 1 to existing
-    char one[2];
-    one[0] = '1';
-    one[1] = '\0';
+    char * one = "1\0";
     strcat(str, one);
 
     // Accounts for newly appended 1
@@ -41,10 +39,7 @@ char * dragonfold(int i, char * str) {
 
     // Constructs second half by working backwards on the original
     while(end >= 0){
-        char appendVal[2];
-        (str[end] == '0' ? (appendVal[0] = '1') : (appendVal[0] = '0'));
-        appendVal[1] = '\0';
-        strcat(str, appendVal);
+        strcat(str, (str[end] == '0' ? "1" : "0"));
         end--;
     }
     printf("|---|%s\n", str);

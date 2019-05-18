@@ -10,8 +10,38 @@
 #include <bitset>
 #include <climits>
 #include <math.h>
+#include <time.h>
+#include <bits/stdc++.h>
 
 using namespace std;
+
+// Generate a lookup table for 32bit operating system  
+// using macro  
+#define R2(n)     n,     n + 2*64,     n + 1*64,     n + 3*64 
+#define R4(n) R2(n), R2(n + 2*16), R2(n + 1*16), R2(n + 3*16) 
+#define R6(n) R4(n), R4(n + 2*4 ), R4(n + 1*4 ), R4(n + 3*4 ) 
+
+// Lookup table that store the reverse of each table 
+unsigned int lookuptable[256] = { R6(0), R6(2), R6(1), R6(3) }; 
+  
+/* Function to reverse bits of num */
+int reverseBits(unsigned int num) 
+{ 
+    int reverse_num = 0; 
+  
+     // Reverse and then rearrange  
+  
+                   // first chunk of 8 bits from right 
+     reverse_num = lookuptable[ num & 0xff ]<<24 |  
+  
+                   // second chunk of 8 bits from  right  
+                   lookuptable[ (num >> 8) & 0xff ]<<16 |  
+  
+                   lookuptable[ (num >> 16 )& 0xff ]<< 8 | 
+                   lookuptable[ (num >>24 ) & 0xff ] ; 
+    
+    return reverse_num; 
+} 
 
 bool axisValid(int size, long int seq);
 bool axisValid(int size, char ** board);
@@ -29,8 +59,33 @@ int main(int argc, char *argv[]){
     istringstream(argv[1]) >> n;
 
     // Uses a reflected binary code generator to search for an axis-valid board
-    long int seq = -(pow(2,n*n));
-    long int end = (pow(2,n*n));
+
+    // prior cooking TODO
+    long int end, seq, start;
+    srand(time(NULL));
+
+    // how to limit by number of X's and O's...
+    // You must be able to limit it by related to which numbers cause a large amount
+    // of bits to be turned off or on.
+    // ex are both large but have few bits on
+    // 100000000 versus 100000001
+    // if a number is mod-able by 1,2,4,8,... then it has a bit on.
+    // select between 10 and 22 bits to be on, ie generate 4 random
+    // problem is not in generation but in the checking, so we can reject numbers that
+    // are not modable by at least 10 or 22 digits, converts n^2 to less, maybe nlogn?
+    // could I increment or start the counter so as to generate #s with lots of 0's/1's?
+    // there must be!
+
+    // double twotimes = (double)2*INT_MAX;
+    // cout << (__DBL_MAX__/2 == 2*INT_MAX) << endl;
+    // cout << INT_MAX << " " << twotimes << endl;
+    end = (pow(2,n*n));
+    start = -(pow(2,n*n));
+
+    // start = rand() % (int)((double)2*end) - end;
+    seq = start;
+    cout << "Start: " << start << endl;
+    
     while(seq < end){
         if(axisValid(n, seq)){
             cout << "Answer found at: " << seq << endl;
@@ -39,6 +94,15 @@ int main(int argc, char *argv[]){
         }
         seq++;
     }
+    // seq=start;
+    // while(seq > -end){
+    //     if(axisValid(n, seq)){
+    //         cout << "Answer found at: " << seq << endl;
+    //         printIntAsBoard(seq, n);
+    //         break;
+    //     }
+    //     seq--;
+    // }
 }
 
 // Returns if a bit is on starting from the rightmost location and taking row dominant values as i/j
