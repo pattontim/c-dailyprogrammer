@@ -1,4 +1,4 @@
-Purpose: Given number of die and faces will provide a sum and output numbers, according to du
+Purpose: Given number of die and faces will provide a sum and output numbers.
 
 Task I - Roll Die
 

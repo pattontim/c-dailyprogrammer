@@ -4,35 +4,34 @@
 
 int selfedgeToIndex(char * name);
 int noteToIndex(char * name);
-char * note(char * aNote, char * se);
+char * getScaleNote(char * note, char * selfedge);
 
 //TODO store notes in an index, write functions for retrieval
 char * notes[] = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
-char * selfedges[] = {"Do", "Re", "Mi", "Fa", "So", "La", "Ti"};
-int selfVals[] ={0, 2, 4, 5, 7, 9, 11};
+char * selfedges[] = {"Do", "", "Re", "", "Mi", "Fa", "", "So", "La", "", "Ti"};
 
 int main(){
-   printf("%s\n", note("C", "Do"));
-   printf("%s\n", note("C", "Re"));
-   printf("%s\n", note("C", "Mi"));
-   printf("%s\n", note("D", "Mi"));
-   printf("%s\n", note("A#", "Fa"));
+   printf("%s\n", getScaleNote("C", "Do"));
+   printf("%s\n", getScaleNote("C", "Re"));
+   printf("%s\n", getScaleNote("C", "Mi"));
+   printf("%s\n", getScaleNote("D", "Mi"));
+   printf("%s\n", getScaleNote("A#", "Fa"));
 }
 
-int noteToIndex(char * name){
+int noteToIndex(char * note){
     for(int i = 0; i < 12; i++){
-        if(strcmp(notes[i], name) == 0)
+        if(strcmp(notes[i], note) == 0)
             return i;
     }
 }
 
-int selfedgeToIndex(char * name){
-    for(int i = 0; i < 7; i++){
-        if(strcmp(selfedges[i], name) == 0)
-            return selfVals[i];
+int selfedgeToIndex(char * note){
+    for(int i = 0; i < 12; i++){
+        if(strcmp(selfedges[i], note) == 0)
+            return i;
     }
 }
 
-char * note(char * aNote, char * se){ 
-    return notes[(noteToIndex(aNote)+selfedgeToIndex(se))%NOTE_NUM];
+char * getScaleNote(char * note, char * selfedge){ 
+    return notes[(noteToIndex(note)+selfedgeToIndex(selfedge))%NOTE_NUM];
 }
