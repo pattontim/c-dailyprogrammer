@@ -3,36 +3,38 @@
 #include <string>
 #include <algorithm>
 
+// Checks if the given string is in accordance with the I before E except after C rule
+// Words that do not contain ei/are not relevant to this problem like 'dog' are returned
+// as true. It does not handle complex rules but instead relies on a simple heuristic
 bool check(std::string word);
 
 int main(){
-//test cases
- // std::cout << check("fiery");
- // std::cout << check("ceiling");
- // std::cout << check("programmer");
- // std::cout << check("sleigh");
- // std::cout << check("nuclei");
- // std::cout << check("reimburse");
-
- //check database for accordance with I before E
+ //check input text for accordance with I before E except after C rule
   std::string line;
-  std::ifstream myfile ("english.txt");
-  int exc = 0;
+  std::ifstream myfile ("example.txt");
+  int failed = 0;
   if (myfile.is_open()){
     while (getline(myfile, line)){
       if(!check(line))
-        exc++;
+        failed++;
     }
     myfile.close();
   }
   else std::cout << "Unable to open file" << std::endl;
 
-  std::cout << std::endl << exc << std::endl;
+  //test cases
+  std::cout << check("fiery") << std::endl;
+  std::cout << check("ceiling") << std::endl;
+  std::cout << check("programmer") << std::endl;
+  std::cout << check("sleigh") << std::endl;
+  std::cout << check("nuclei") << std::endl;
+  std::cout << check("reimburse") << std::endl;
+
+  if(failed) std::cout << "Number of failed words in file: " << failed << std::endl;
   return 0;
 }
 
 bool check(std::string word) {
-  //convert source to lowercase
   std::transform(word.begin(), word.end(), word.begin(), ::tolower);
 
   if(word.find("cie") != -1)
