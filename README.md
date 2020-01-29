@@ -3,7 +3,7 @@ Dailyprogrammer is about challenging programmers of all skill level with weekly 
 
 The challenge links can be found below.
 
-## Crytography
+## Cryptography
 
 [ElsieFour (LC4) Encryption and Decryption (hard)](https://www.reddit.com/r/dailyprogrammer/comments/8jvbzg/20180516_challenge_361_intermediate_elsiefour/)
 
